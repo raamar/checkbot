@@ -4,9 +4,23 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "DOTENV_CONFIG_PATH=.env node -r dotenv/config npx ts-node index.ts",
+    "dev": "DOTENV_CONFIG_PATH=.env node -r dotenv/config npx nodemon index.ts"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.12.11",
+    "dotenv": "^16.4.5",
+    "nodemon": "^3.1.0",
+    "prisma": "^5.13.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@prisma/client": "5.13.0",
+    "node-telegram-bot-api": "^0.65.1"
+  }
 }
