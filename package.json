@@ -5,14 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "DOTENV_CONFIG_PATH=.env node -r dotenv/config npx ts-node index.ts",
-    "dev": "DOTENV_CONFIG_PATH=.env node -r dotenv/config npx nodemon index.ts"
+    "start": "DOTENV_CONFIG_PATH=.env ts-node -r dotenv/config index.ts",
+    "dev": "DOTENV_CONFIG_PATH=.env nodemon -r dotenv/config index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.12.11",
+    "@types/node-telegram-bot-api": "^0.64.6",
     "dotenv": "^16.4.5",
     "nodemon": "^3.1.0",
     "prisma": "^5.13.0",
@@ -21,6 +22,7 @@
   },
   "dependencies": {
     "@prisma/client": "5.13.0",
+    "console-stamp": "^3.1.2",
     "node-telegram-bot-api": "^0.65.1"
   }
 }
