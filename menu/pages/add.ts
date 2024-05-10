@@ -1,13 +1,14 @@
 import { type Page } from '..'
 import { addCallbackData } from '../callbackData'
 
-interface IMain {}
+interface INext {}
 
-export const main: Page<IMain> = (props) => {
+export const add: Page<INext> = (props) => {
   return {
     get text() {
-      return `Вы на главном экране`
+      return `Добавить домен`
     },
+
     options(message_id) {
       return {
         parse_mode: 'HTML',
@@ -15,9 +16,9 @@ export const main: Page<IMain> = (props) => {
           inline_keyboard: [
             [
               {
-                text: 'Добавить домен',
+                text: 'Назад',
                 callback_data: addCallbackData({
-                  page: 'add',
+                  page: 'main',
                   params: {},
                   message_id,
                 }),

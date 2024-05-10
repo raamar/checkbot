@@ -1,9 +1,9 @@
 import { main } from './pages/main'
-import { next } from './pages/next'
+import { add } from './pages/add'
 
 const pages = {
   main,
-  next,
+  add,
 }
 
 export default pages

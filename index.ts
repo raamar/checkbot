@@ -11,6 +11,11 @@ void (() => {
     polling: true,
   })
 
+  bot.getMe().then(({ username }) => {
+    console.log('BOT started')
+    console.log(`https://web.telegram.org/k/#@${username}`)
+  })
+
   const menu = initMenu(bot)
 
   bot.onText(/\/start/, async (msg) => {
@@ -53,6 +58,7 @@ void (() => {
         chat_id: user.chat_id,
         page: data.page,
         params: data.params,
+        message_id: data.message_id,
       })
     } catch (error) {
       if (error instanceof Error) {
