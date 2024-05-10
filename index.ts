@@ -1,6 +1,8 @@
 import consoleStamp from 'console-stamp'
 import getUserByChatId from './service/getUserByChatId'
 import TelegramBot = require('node-telegram-bot-api')
+import initMenu from './menu'
+import { getCallbackData } from './menu/callbackData'
 
 consoleStamp(console)
 
@@ -9,13 +11,54 @@ void (() => {
     polling: true,
   })
 
+  const menu = initMenu(bot)
+
   bot.onText(/\/start/, async (msg) => {
     try {
       const user = await getUserByChatId(msg.chat.id.toString())
-      await bot.sendMessage(user.chat_id, `<code>${JSON.stringify(user, null, 2)}</code>`, {
-        parse_mode: 'HTML',
+
+      await menu.showPage({
+        chat_id: user.chat_id,
+        page: 'main',
+        params: {
+          counter: 1,
+        },
       })
     } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message)
+        return
+      }
+      console.error(error)
+    }
+  })
+
+  bot.on('callback_query', async (query) => {
+    try {
+      const id = query?.message?.chat?.id?.toString()
+      const { data: data_id } = query
+
+      if (!id || !data_id) {
+        return
+      }
+
+      const user = await getUserByChatId(id)
+      const data = getCallbackData(data_id)
+
+      if (!data) {
+        return
+      }
+
+      await menu.showPage({
+        chat_id: user.chat_id,
+        page: data.page,
+        params: data.params,
+      })
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message)
+        return
+      }
       console.error(error)
     }
   })
