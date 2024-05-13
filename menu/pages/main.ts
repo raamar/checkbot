@@ -1,5 +1,5 @@
 import { type Page } from '..'
-import { addCallbackData } from '../callbackData'
+import createButton from '../createButton'
 
 interface IMain {}
 
@@ -14,14 +14,12 @@ export const main: Page<IMain> = (props) => {
         reply_markup: {
           inline_keyboard: [
             [
-              {
+              createButton({
+                message_id,
+                page: 'add',
+                params: {},
                 text: 'Добавить домен',
-                callback_data: addCallbackData({
-                  page: 'add',
-                  params: {},
-                  message_id,
-                }),
-              },
+              }),
             ],
           ],
         },

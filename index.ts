@@ -25,9 +25,25 @@ void (() => {
       await menu.showPage({
         chat_id: user.chat_id,
         page: 'main',
-        params: {
-          counter: 1,
-        },
+        params: {},
+      })
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message)
+        return
+      }
+      console.error(error)
+    }
+  })
+
+  bot.onText(/\/add/, async (msg) => {
+    try {
+      const user = await getUserByChatId(msg.chat.id.toString())
+
+      await menu.showPage({
+        chat_id: user.chat_id,
+        page: 'add',
+        params: {},
       })
     } catch (error) {
       if (error instanceof Error) {

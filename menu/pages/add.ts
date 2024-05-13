@@ -1,5 +1,5 @@
 import { type Page } from '..'
-import { addCallbackData } from '../callbackData'
+import createButton from '../createButton'
 
 interface INext {}
 
@@ -15,14 +15,12 @@ export const add: Page<INext> = (props) => {
         reply_markup: {
           inline_keyboard: [
             [
-              {
+              createButton({
+                message_id,
+                page: 'main',
+                params: {},
                 text: 'Назад',
-                callback_data: addCallbackData({
-                  page: 'main',
-                  params: {},
-                  message_id,
-                }),
-              },
+              }),
             ],
           ],
         },
