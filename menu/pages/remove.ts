@@ -6,15 +6,18 @@ interface IMain {
   chat_id: string
 }
 
-export const main: Page<IMain> = async (props) => {
+export const remove: Page<IMain> = async (props) => {
   const { subscriptions } = await prisma.user.findUniqueOrThrow({
     where: {
       chat_id: props.chat_id,
     },
     select: {
+      id: true,
       subscriptions: {
         select: {
           host: true,
+          hostId: true,
+          userId: true,
         },
       },
     },
@@ -22,34 +25,34 @@ export const main: Page<IMain> = async (props) => {
 
   return {
     get text() {
-      return (
-        `Список ресурсов:\n\n` +
-        subscriptions.map((item, idx) => `[${idx + 1}] <code>${item.host.value}</code>`).join('\n')
-      )
+      return `Какой ресурс удаляем?`
     },
     options(message_id) {
       return {
         parse_mode: 'HTML',
         reply_markup: {
           inline_keyboard: [
-            [
+            ...subscriptions.map((subscription) => [
               createButton({
                 message_id,
-                page: 'add',
+                page: 'remove_check',
                 params: {
                   chat_id: props.chat_id,
+                  host: subscription.host.value,
+                  hostId: subscription.hostId,
+                  userId: subscription.userId,
                 },
-                text: 'Добавить ресурс',
+                text: subscription.host.value,
               }),
-            ],
+            ]),
             [
               createButton({
                 message_id,
-                page: 'remove',
+                page: 'main',
                 params: {
                   chat_id: props.chat_id,
                 },
-                text: 'Удалить ресурс',
+                text: 'Назад',
               }),
             ],
           ],

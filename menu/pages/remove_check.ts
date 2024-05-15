@@ -1,32 +1,19 @@
 import { type Page } from '..'
-import prisma from '../../prisma/client'
 import createButton from '../createButton'
 
-interface IMain {
+interface INext {
   chat_id: string
+  host: string
+  hostId: number
+  userId: number
 }
 
-export const main: Page<IMain> = async (props) => {
-  const { subscriptions } = await prisma.user.findUniqueOrThrow({
-    where: {
-      chat_id: props.chat_id,
-    },
-    select: {
-      subscriptions: {
-        select: {
-          host: true,
-        },
-      },
-    },
-  })
-
+export const remove_check: Page<INext> = async (props) => {
   return {
     get text() {
-      return (
-        `Список ресурсов:\n\n` +
-        subscriptions.map((item, idx) => `[${idx + 1}] <code>${item.host.value}</code>`).join('\n')
-      )
+      return `Подтвердите удаление:\n\n` + `<s><code>${props.host}</code></s>`
     },
+
     options(message_id) {
       return {
         parse_mode: 'HTML',
@@ -35,21 +22,23 @@ export const main: Page<IMain> = async (props) => {
             [
               createButton({
                 message_id,
-                page: 'add',
+                page: 'remove_done',
                 params: {
                   chat_id: props.chat_id,
+                  hostId: props.hostId,
+                  userId: props.userId,
                 },
-                text: 'Добавить ресурс',
+                text: 'Подтверждаю',
               }),
             ],
             [
               createButton({
                 message_id,
-                page: 'remove',
+                page: 'main',
                 params: {
                   chat_id: props.chat_id,
                 },
-                text: 'Удалить ресурс',
+                text: 'Назад',
               }),
             ],
           ],
