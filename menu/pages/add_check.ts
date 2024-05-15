@@ -8,17 +8,17 @@ interface INext {
 
 export const add_check: Page<INext> = async (props) => {
   try {
-    const match = props.url.match(/^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)/gim)
+    const regex = new RegExp(/^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)/gim).exec(props.url)
 
-    if (!match || match[0].indexOf('.') < 0) {
+    if (!regex || regex[1].indexOf('.') < 0) {
       throw new Error()
     }
 
-    const host = match[0].toLocaleLowerCase()
+    const host = regex[1].toLocaleLowerCase()
 
     return {
       get text() {
-        return `Подтвердите ввод:\n` + `${host}`
+        return `Подтвердите ввод:\n\n` + `<code>${host}</code>`
       },
 
       options(message_id) {

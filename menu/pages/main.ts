@@ -23,8 +23,8 @@ export const main: Page<IMain> = async (props) => {
   return {
     get text() {
       return (
-        `Список ресурсов:\n` +
-        subscriptions.map((item, idx) => `${idx + 1}. <code>${item.host.value}</code>`).join('\n')
+        `Список ресурсов:\n\n` +
+        subscriptions.map((item, idx) => `[${idx + 1}] <code>${item.host.value}</code>`).join('\n')
       )
     },
     options(message_id) {
@@ -39,7 +39,7 @@ export const main: Page<IMain> = async (props) => {
                 params: {
                   chat_id: props.chat_id,
                 },
-                text: 'Добавить домен',
+                text: 'Добавить ресурс',
               }),
             ],
           ],

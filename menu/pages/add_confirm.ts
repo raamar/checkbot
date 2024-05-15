@@ -35,7 +35,7 @@ export const add_confirm: Page<INext> = async (props, showPage, message_id) => {
   })
   return {
     get text() {
-      return `Теперь вы отслеживаете <code>${host.value}</code>.`
+      return `Теперь вы отслеживаете ресурс\n\n<code>${host.value}</code>`
     },
 
     options(message_id) {
@@ -50,7 +50,7 @@ export const add_confirm: Page<INext> = async (props, showPage, message_id) => {
                 params: {
                   chat_id: props.chat_id,
                 },
-                text: 'На главную.',
+                text: 'На главную',
               }),
             ],
           ],
