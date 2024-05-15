@@ -12,7 +12,7 @@ export const add: Page<INext> = async (props, showPage, message_id) => {
     type: 'text',
   }).then((url) => {
     showPage({
-      page: 'confirm',
+      page: 'add_check',
       chat_id: props.chat_id,
       message_id,
       params: {

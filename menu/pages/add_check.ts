@@ -6,7 +6,7 @@ interface INext {
   url: string
 }
 
-export const confirm: Page<INext> = async (props) => {
+export const add_check: Page<INext> = async (props) => {
   try {
     const match = props.url.match(/^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)/gim)
 
@@ -14,10 +14,11 @@ export const confirm: Page<INext> = async (props) => {
       throw new Error()
     }
 
-    const url = match[0].toLocaleLowerCase()
+    const host = match[0].toLocaleLowerCase()
+
     return {
       get text() {
-        return `<code>${url}</code>`
+        return `Подтвердите ввод:\n` + `${host}`
       },
 
       options(message_id) {
@@ -28,11 +29,30 @@ export const confirm: Page<INext> = async (props) => {
               [
                 createButton({
                   message_id,
+                  page: 'add_confirm',
+                  params: {
+                    host,
+                    chat_id: props.chat_id,
+                  },
+                  text: 'Подтверждаю',
+                }),
+              ],
+              [
+                createButton({
+                  message_id,
                   page: 'main',
                   params: {
                     chat_id: props.chat_id,
                   },
                   text: 'Назад',
+                }),
+                createButton({
+                  message_id,
+                  page: 'add',
+                  params: {
+                    chat_id: props.chat_id,
+                  },
+                  text: 'Повторить ввод',
                 }),
               ],
             ],

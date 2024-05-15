@@ -22,7 +22,10 @@ export const main: Page<IMain> = async (props) => {
 
   return {
     get text() {
-      return `Список ресурсов:\n` + subscriptions.map((item) => item.host)
+      return (
+        `Список ресурсов:\n` +
+        subscriptions.map((item, idx) => `${idx + 1}. <code>${item.host.value}</code>`).join('\n')
+      )
     },
     options(message_id) {
       return {
