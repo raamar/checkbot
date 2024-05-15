@@ -1,15 +1,11 @@
 import { main } from './pages/main'
 import { add } from './pages/add'
-import { confirmation } from './pages/confirmation'
+import { confirm } from './pages/confirm'
 
 const pages = {
   main,
   add,
-}
-
-const helpers = {
-  confirmation,
+  confirm,
 }
 
 export default pages
-export { helpers }

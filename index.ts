@@ -3,6 +3,7 @@ import getUserByChatId from './service/getUserByChatId'
 import TelegramBot = require('node-telegram-bot-api')
 import initMenu from './menu'
 import { getCallbackData } from './menu/callbackData'
+import { handleInput } from './inputManager'
 
 consoleStamp(console)
 
@@ -18,6 +19,12 @@ void (() => {
 
   const menu = initMenu(bot)
 
+  bot.on('message', (msg) => {
+    if (handleInput(msg.chat.id, msg)) {
+      bot.deleteMessage(msg.chat.id, msg.message_id)
+    }
+  })
+
   bot.onText(/\/start/, async (msg) => {
     try {
       const user = await getUserByChatId(msg.chat.id.toString())
@@ -25,7 +32,9 @@ void (() => {
       await menu.showPage({
         chat_id: user.chat_id,
         page: 'main',
-        params: {},
+        params: {
+          chat_id: user.chat_id,
+        },
       })
     } catch (error) {
       if (error instanceof Error) {
@@ -43,7 +52,9 @@ void (() => {
       await menu.showPage({
         chat_id: user.chat_id,
         page: 'add',
-        params: {},
+        params: {
+          chat_id: user.chat_id,
+        },
       })
     } catch (error) {
       if (error instanceof Error) {
@@ -64,7 +75,7 @@ void (() => {
       }
 
       const user = await getUserByChatId(id)
-      const data = getCallbackData(data_id)
+      const data = getCallbackData(id, data_id)
 
       if (!data) {
         return
@@ -84,15 +95,4 @@ void (() => {
       console.error(error)
     }
   })
-
-  // bot.onText(/\/add (.+)/, (msg, match) => {
-  //   if (!match) {
-  //     return
-  //   }
-
-  //   const { id } = msg.chat
-  //   const url = match[1]
-
-  //   bot.sendMessage(id, url)
-  // })
 })()

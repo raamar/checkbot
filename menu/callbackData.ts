@@ -1,7 +1,13 @@
-import { v4 } from 'uuid'
 import localStorage from '../sessionsData/localStorage'
 import pages from './config'
 
+const createIfNotExists = (user_id: string) => {
+  try {
+    localStorage.getItem(user_id)
+  } catch (_) {
+    localStorage.setItem(user_id, '{}')
+  }
+}
 const addCallbackData = <T extends keyof typeof pages>(data: {
   page: T
   params: Parameters<(typeof pages)[T]>['0']
@@ -11,27 +17,53 @@ const addCallbackData = <T extends keyof typeof pages>(data: {
     return '0'
   }
 
-  const id = v4()
-  localStorage.setItem(id, JSON.stringify(data))
+  createIfNotExists(data.params.chat_id)
+
+  const root_id = `${data.params.chat_id}_${data.message_id}_`
+  const callbackData = JSON.parse(localStorage?.getItem(data.params.chat_id) || '{}')
+  const id = root_id + Object.keys(callbackData).filter((key) => key.includes(root_id)).length
+
+  localStorage.setItem(
+    data.params.chat_id,
+    JSON.stringify(
+      Object.assign(callbackData, {
+        [id]: data,
+      })
+    )
+  )
   return id
 }
 
-type GetCallbackData = (id: string) => Parameters<typeof addCallbackData>['0'] | null
+type GetCallbackData = (user_id: string, id: string) => Parameters<typeof addCallbackData>['0'] | null
 
-const getCallbackData: GetCallbackData = (id: string) => {
+const getCallbackData: GetCallbackData = (user_id, id) => {
   try {
-    const raw = localStorage?.getItem(id)
+    const raw = localStorage.getItem(user_id)
+
     if (!raw) {
       return null
     }
 
     const data = JSON.parse(raw)
-    localStorage.removeItem(id)
+    const item = data[id]
 
-    return data
+    if (!item) {
+      return null
+    }
+
+    delete data[id]
+    localStorage.setItem(user_id, JSON.stringify(data))
+
+    return item
   } catch (error) {
     return null
   }
 }
 
-export { addCallbackData, getCallbackData }
+const clearCallbackData = (user_id: string) => {
+  createIfNotExists(user_id)
+
+  localStorage.setItem(user_id, '{}')
+}
+
+export { addCallbackData, getCallbackData, clearCallbackData }

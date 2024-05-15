@@ -1,21 +1,31 @@
 import type TelegramBot = require('node-telegram-bot-api')
 import pages from './config'
+import { clearInput } from '../inputManager'
+import { clearCallbackData } from './callbackData'
 
-export type Page<T> = (props: T) => {
+type ShowPage = <T extends keyof typeof pages>(props: {
+  page: T
+  chat_id: TelegramBot.ChatId
+  params: Parameters<(typeof pages)[T]>[number]
+  message_id?: number
+}) => Promise<boolean | TelegramBot.Message>
+
+export type Page<T> = (
+  props: T,
+  showPage: ShowPage,
+  message_id?: number
+) => PromiseLike<{
   text: string
   options?: (message_id: number) => TelegramBot.EditMessageTextOptions
-}
+}>
 
 const initMenu = (bot: TelegramBot) => {
-  const showPage = async <T extends keyof typeof pages>(props: {
-    page: T
-    chat_id: TelegramBot.ChatId
-    params: Parameters<(typeof pages)[T]>[number]
-    message_id?: number
-  }) => {
+  const showPage: ShowPage = async (props) => {
+    clearInput(props.chat_id.toString())
+    clearCallbackData(props.chat_id.toString())
     try {
       //@ts-ignore
-      const page = pages[props.page](props.params)
+      const page = await pages[props.page](props.params, showPage, props?.message_id)
 
       if (!page.options) {
         page.options = () => ({})
