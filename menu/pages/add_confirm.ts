@@ -8,6 +8,46 @@ interface INext {
 }
 
 export const add_confirm: Page<INext> = async (props, showPage, message_id) => {
+  const user = await prisma.user.findUniqueOrThrow({
+    where: {
+      chat_id: props.chat_id,
+    },
+    select: {
+      _count: {
+        select: {
+          subscriptions: true,
+        },
+      },
+    },
+  })
+  if (user._count.subscriptions >= +process.env.MAX_SUBSCRIPTIONS) {
+    return {
+      get text() {
+        return `Вы превысили максимальное количество подписок.`
+      },
+
+      options(message_id) {
+        return {
+          parse_mode: 'HTML',
+          reply_markup: {
+            inline_keyboard: [
+              [
+                createButton({
+                  message_id,
+                  page: 'main',
+                  params: {
+                    chat_id: props.chat_id,
+                  },
+                  text: 'На главную',
+                }),
+              ],
+            ],
+          },
+        }
+      },
+    }
+  }
+
   const host = await prisma.host.upsert({
     where: {
       value: props.host,

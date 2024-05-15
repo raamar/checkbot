@@ -8,6 +8,7 @@ declare global {
       DB_PORT: string
       TELEGRAM_TOKEN: string
       DATABASE_URL: string
+      MAX_SUBSCRIPTIONS: string
     }
   }
 }
