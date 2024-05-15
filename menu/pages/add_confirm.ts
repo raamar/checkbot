@@ -31,6 +31,15 @@ export const add_confirm: Page<INext> = async (props, showPage, message_id) => {
     },
     update: {
       value: props.host,
+      subscriptions: {
+        create: {
+          user: {
+            connect: {
+              chat_id: props.chat_id,
+            },
+          },
+        },
+      },
     },
   })
   return {
