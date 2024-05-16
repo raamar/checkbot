@@ -24,7 +24,7 @@ export const add: Page<INext> = async (props, showPage, message_id) => {
 
   return {
     get text() {
-      return `Введите адрес ресурса:`
+      return `Введите адрес ресурса\n\nНапример:\n<code>https://example.com/</code>\n<code>111.111.111.111</code>`
     },
 
     options(message_id) {

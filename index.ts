@@ -5,6 +5,7 @@ import initMenu from './menu'
 import { getCallbackData } from './menu/callbackData'
 import { handleInput } from './inputManager'
 import { update } from './tasks/update'
+import { schedule } from 'node-cron'
 
 consoleStamp(console)
 
@@ -97,6 +98,5 @@ void (() => {
     }
   })
 
-  // schedule('* * * * *', update)
-  update(bot)
+  schedule('* * * * *', update.bind(null, bot))
 })()

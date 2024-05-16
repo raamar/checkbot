@@ -53,13 +53,14 @@ export const update = async (bot: TelegramBot) => {
           }
         } catch (error) {
           if (error instanceof AxiosError) {
+            console.error(error)
             return {
               hostId: item.id,
               host: item.value,
               subscriptions: item.subscriptions,
               time: error?.response?.headers['request-duration'] ?? Number(process.env.CHECK_TIMEOUT),
               https: error?.response?.headers['is-https'] ?? false,
-              status: error?.response?.status ?? -1,
+              status: error?.response?.status ?? 408,
             }
           }
         }
