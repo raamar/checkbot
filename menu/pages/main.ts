@@ -35,11 +35,21 @@ export const main: Page<IMain> = async (props) => {
             [
               createButton({
                 message_id,
+                page: 'main',
+                params: {
+                  chat_id: props.chat_id,
+                },
+                text: '🔄 Обновить',
+              }),
+            ],
+            [
+              createButton({
+                message_id,
                 page: 'add',
                 params: {
                   chat_id: props.chat_id,
                 },
-                text: 'Добавить ресурс',
+                text: '+ Добавить ресурс',
               }),
             ],
             [
@@ -49,7 +59,7 @@ export const main: Page<IMain> = async (props) => {
                 params: {
                   chat_id: props.chat_id,
                 },
-                text: 'Удалить ресурс',
+                text: '— Удалить ресурс',
               }),
             ],
           ],

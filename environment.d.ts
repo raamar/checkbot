@@ -9,6 +9,7 @@ declare global {
       TELEGRAM_TOKEN: string
       DATABASE_URL: string
       MAX_SUBSCRIPTIONS: string
+      CHECK_TIMEOUT: string
     }
   }
 }

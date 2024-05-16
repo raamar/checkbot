@@ -25,7 +25,7 @@ export const remove: Page<IMain> = async (props) => {
 
   return {
     get text() {
-      return `Какой ресурс удаляем?`
+      return `Выберите ресурс для удаления:`
     },
     options(message_id) {
       return {

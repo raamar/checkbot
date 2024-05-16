@@ -39,5 +39,8 @@ model Check {
   id                Int                 @id @default(autoincrement())
   createdAt         DateTime            @default(now())
   host              Host                @relation(fields: [hostId], references: [id])
-  hostId            Int              
+  hostId            Int
+  https             Boolean              
+  time              Int
+  status            Int
 }

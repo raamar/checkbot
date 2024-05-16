@@ -4,6 +4,7 @@ import TelegramBot = require('node-telegram-bot-api')
 import initMenu from './menu'
 import { getCallbackData } from './menu/callbackData'
 import { handleInput } from './inputManager'
+import { update } from './tasks/update'
 
 consoleStamp(console)
 
@@ -95,4 +96,7 @@ void (() => {
       console.error(error)
     }
   })
+
+  // schedule('* * * * *', update)
+  update(bot)
 })()
